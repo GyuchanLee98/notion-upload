@@ -3,7 +3,7 @@ name: Onion Scan
 on:
   workflow_dispatch:
   schedule:
-    - cron: '45 15 * * *'  # ✅ 한국시간 00:45 = UTC 15:45
+    - cron: '57 15 * * *'  # ✅ 매일 KST 00:57 실행 (UTC 15:57 기준)
 
 defaults:
   run:
