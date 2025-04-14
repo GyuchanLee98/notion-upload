@@ -1,9 +1,9 @@
 name: Onion Scan
 
 on:
-  workflow_dispatch:     # ✅ 수동 실행
-  schedule:              # ✅ 자동 실행 (매일 오전 9시)
-    - cron: '0 0 * * *'  # → UTC 기준, 한국 시간 오전 9시는 0시 (KST+9)
+  workflow_dispatch:     # ✅ 수동 실행 여전히 가능
+  schedule:              # ✅ 매일 한국시간 오후 11시 43분
+    - cron: '43 14 * * *'
 
 jobs:
   run:
