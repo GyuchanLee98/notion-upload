@@ -7,6 +7,10 @@ jobs:
   run:
     runs-on: ubuntu-latest
 
+    env:  # ✅ 여기 추가
+      NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+      NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -19,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install beautifulsoup4
-          pip install notion-client  # ✅ 요거 추가됨
+          pip install notion-client
 
       - name: Run scan script
         run: |
