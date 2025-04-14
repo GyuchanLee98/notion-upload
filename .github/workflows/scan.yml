@@ -1,32 +1,38 @@
 name: Onion Scan
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '15 15 * * *'  # 매일 UTC 15:15 → 한국시간 00:15
-
-jobs:
-  run:
-    runs-on: ubuntu-latest
-
-    env:
-      NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
-      NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          pip install beautifulsoup4
-          pip install notion-client
-
-      - name: Run scan script
-        run: |
-          python onion_scan.py
+    workflow_dispatch:
+    schedule:
+      - cron: '40 15 * * *'
+  
+  defaults:
+    run:
+      shell: bash  # ✅ 명시해주면 OS 상관없이 안전하게 동작
+  
+  jobs:
+    run:
+      runs-on: ubuntu-latest
+      if: github.ref == 'refs/heads/main'
+  
+      env:
+        NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+        NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}
+  
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+  
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: '3.11'
+  
+        - name: Install dependencies
+          run: |
+            pip install beautifulsoup4
+            pip install notion-client
+  
+        - name: Run scan script
+          run: |
+            python onion_scan.py
+  
