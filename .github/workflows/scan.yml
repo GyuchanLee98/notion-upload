@@ -1,7 +1,7 @@
 name: Onion Scan
 
 on:
-  workflow_dispatch:  # 버튼 눌러서 수동 실행할 수 있게 함
+  workflow_dispatch:
 
 jobs:
   run:
@@ -19,6 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install beautifulsoup4
+          pip install notion-client  # ✅ 요거 추가됨
 
       - name: Run scan script
         run: |
