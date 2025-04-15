@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from notion_client import Client
 from datetime import datetime
 import os
+import csv
 
 # Notion 설정
 notion = Client(auth=os.environ["NOTION_API_KEY"])
@@ -57,6 +58,13 @@ def generate_markdown_report(keywords, content):
     markdown += "\n---"
     return markdown, risk, guide
 
+# CSV 리포트 저장
+def save_csv_report(keywords, risk_level, guide, filename="report.csv"):
+    with open(filename, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerow(["감지 키워드", "위험도", "대응 가이드"])
+        writer.writerow([", ".join(keywords), risk_level, " / ".join(guide)])
+
 # 샘플 HTML
 html = """
 <html>
@@ -76,7 +84,10 @@ if found:
     print(f"[!] 위험 키워드 감지됨: {found}")
     report_md, risk_level, guide_list = generate_markdown_report(found, text)
 
-    # Notion 업로드
+    # ✅ CSV 저장
+    save_csv_report(found, risk_level, guide_list)
+
+    # ✅ Notion 업로드
     notion.pages.create(
         parent={"database_id": database_id},
         properties={
@@ -89,6 +100,7 @@ if found:
             "위험도": {"select": {"name": risk_level}},
             "감지 키워드": {"rich_text": [{"text": {"content": ', '.join(found)}}]},
             "대응 가이드": {"rich_text": [{"text": {"content": '\n'.join(guide_list)}}]},
+            "CSV 리포트 링크": {"url": "https://raw.githubusercontent.com/GyuchanLee98/notion-upload/main/report.csv"}  # 수정 필요
         }
     )
 else:

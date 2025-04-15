@@ -35,3 +35,14 @@ jobs:
       - name: Run scan script
         run: |
           python onion_scan.py
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Commit and push report.csv
+        run: |
+          git add report.csv
+          git commit -m "자동 생성된 CSV 리포트 업데이트 $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push
