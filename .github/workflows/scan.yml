@@ -1,9 +1,12 @@
 name: Onion Scan
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # 수동 실행 허용
   schedule:
-    - cron: '57 15 * * *'  # 매일 KST 00:57
+    - cron: '57 15 * * *'  # 매일 KST 00:57 자동 실행
+
+permissions:
+  contents: write  # GitHub Actions에서 push 가능하게 설정
 
 defaults:
   run:
@@ -11,9 +14,8 @@ defaults:
 
 jobs:
   run:
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    permissions:
-      contents: write  # ✅ push 권한 부여됨
 
     env:
       NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
@@ -42,8 +44,8 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-      - name: Commit and push report.csv
+      - name: Commit and push CSV report
         run: |
-          git add report.csv
-          git commit -m "자동 생성된 CSV 리포트 업데이트 $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git add *.csv
+          git commit -m "자동 리포트 업데이트 $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
