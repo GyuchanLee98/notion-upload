@@ -3,7 +3,7 @@ name: Onion Scan
 on:
   workflow_dispatch:  # 수동 실행 허용
   schedule:
-    - cron: '52 12 * * *'  # 매일 KST 기준 21:52 자동 실행 (UTC 12:52)
+    - cron: '15 13 * * *'  # KST 22:15
 
 permissions:
   contents: write  # GitHub Actions에서 push 가능하게 설정
